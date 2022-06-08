@@ -6,7 +6,12 @@ exports.create = async (request, response) => {
     const { name, genre } = request.body;
 
     try {
-        await db.query(`INSERT INTO Artist (name, genre) VALUES ('${name}', '${genre}')`);
+        // await db.query(`INSERT INTO Artist (name, genre) VALUES ('${name}', '${genre}')`);
+        
+        await db.query(`INSERT INTO Artist (name, genre) VALUES ('?, ?')`, [
+            name,
+            genre,
+        ]);  // preventing SQL injection by providing '?' variables in an array
     
         response.sendStatus(201);
       } catch (err) {
@@ -15,5 +20,3 @@ exports.create = async (request, response) => {
     
       db.close();
     };
-//     response.sendStatus(201)
-//   };
