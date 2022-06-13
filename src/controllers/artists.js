@@ -51,8 +51,10 @@ exports.create = async (request, response) => {
           response.status(200).json(artist)
       }
 
-      db.close()
+      db.close();
   }
+
+  // updates artist by artistId using the '.update' artistController
 
   exports.update = async (req, res) => {
     const db = await getDb()
@@ -65,14 +67,39 @@ exports.create = async (request, response) => {
       ] = await db.query('UPDATE Artist SET ? WHERE id = ?', [data, artistId])
   
       if (!affectedRows) {
-        res.sendStatus(404)
+        res.sendStatus(404);
       } else {
-        res.status(200).send()
+        res.status(200).send();
       }
     } catch (err) {
-      res.sendStatus(500)
+      res.sendStatus(500);
     }
   
-    db.close()
-    
+    db.close();
+
   }
+
+  // deletes artist by artistId using the '.destroy' artistController
+
+  exports.destroy = async (req, res) => {
+    const db = await getDb();
+    const { artistId } = req.params;
+
+    try {
+        console.log(db);
+        const [ { affectedRows }, ] = await db.query('DELETE FROM Artist WHERE id = ?', [
+          artistId]);
+  
+      if (!affectedRows) {
+        res.sendStatus(404);
+      } else {
+        res.status(200).send();
+      }
+    } catch(err) {
+        res.sendStatus(404);
+    }
+  
+    db.close();
+
+  }
+
